@@ -11,14 +11,13 @@ jobs:
 
     steps:
       - name: Checkout codice
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      # ── Build React frontend ───────────────────────────────────────────
       - name: Installa dipendenze React
         run: |
           cd simplyai-FE
@@ -31,7 +30,7 @@ jobs:
         env:
           CI: false
 
-      # ── Deploy Frontend via FTP ────────────────────────────────────────
+      # FRONTEND
       - name: Deploy Frontend via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
@@ -40,26 +39,23 @@ jobs:
           password: ${{ secrets.FTP_PASS }}
           port: 21
           local-dir: simplyai-FE/dist/
-          server-dir: /
+          server-dir: /public_html/
           dangerous-clean-slate: false
 
-      # ── Deploy Backend via FTP ─────────────────────────────────────────
+      # BACKEND
       - name: Deploy Backend via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USER_BE }}
-          password: ${{ secrets.FTP_PASS_BE }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASS }}
           port: 21
           local-dir: simplyai-BE/
-          server-dir: /
+          server-dir: /api.clearplanai.it/
           dangerous-clean-slate: false
           exclude: |
             **/.git*
             **/.git*/**
             **/node_modules/**
             **/.env
-
-     
-
 
