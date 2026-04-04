@@ -29,10 +29,8 @@ jobs:
           npm run build
         env:
           CI: false
-          
 
-
-      # FRONTEND
+      # FRONTEND - carica dist/ nella root di clearplanai.it
       - name: Deploy Frontend via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
@@ -41,23 +39,22 @@ jobs:
           password: ${{ secrets.FTP_PASS }}
           port: 21
           local-dir: simplyai-FE/dist/
-          server-dir: /public_html/
+          server-dir: /
           dangerous-clean-slate: false
 
-      # BACKEND
+      # BACKEND - carica simplyai-BE/ nella cartella backend
       - name: Deploy Backend via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USER }}
-          password: ${{ secrets.FTP_PASS }}
+          username: ${{ secrets.FTP_USER_BE }}
+          password: ${{ secrets.FTP_PASS_BE }}
           port: 21
           local-dir: simplyai-BE/
-          server-dir: /api.clearplanai.it/
+          server-dir: /
           dangerous-clean-slate: false
           exclude: |
             **/.git*
             **/.git*/**
             **/node_modules/**
             **/.env
-
